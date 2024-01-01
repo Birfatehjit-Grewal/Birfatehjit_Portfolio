@@ -1,0 +1,52 @@
+/*header style*/
+header {
+    padding: 0px;
+ }
+ /*navigation menu style*/
+ nav {
+    display: block;
+    text-align: center;
+    word-spacing: 30px;
+    Padding: 5px;
+    background-color: aqua;
+ }
+ /*creating the two-column layout*/
+ *{
+    box-sizing: border-box;
+ }
+ .row {
+    display: flex;
+ }
+ .game {
+    flex: 0%;
+    padding: 0px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }
+  
+  /* Style the footer */
+  footer {
+    display: block;
+    background-color: chocolate;
+    padding: 5px;
+    text-align: center;
+    color: white;
+  }
+  
+  canvas {
+    display: block;
+    padding: 0px;
+    background-color: #f1f1f1;
+  }
+
+  .content {
+    height: max-content;
+    width: max-content;
+    margin: auto;
+}
+
+body {
+    background-image: url('Resourses/Background.jpg');
+    background-size: cover;
+}

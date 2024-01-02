@@ -41,7 +41,7 @@ function TotalLevels() {
             Counter++;
         });
     })
-    return Data;
+    return Counter;
 }
 
 

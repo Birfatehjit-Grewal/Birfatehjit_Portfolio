@@ -458,12 +458,11 @@ function MakeNextLevel(){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
             let count = TotalLevels();
-            SaveLevel(count+1,testLevel,steps);
-            console.log("Level Test");
+            let L2 = levelString(testLevel);
+            SaveLevel(count+1,L2,steps);
             return testLevel;
         }
     }
-    console.log("Level Test Failed");
 
     return MakeNextLevel();
 }
@@ -548,4 +547,14 @@ function checkUp(testLevel,x,y){
         y--;
     }
     return y;
+}
+
+function levelString(level){
+    let length = level.length;
+    let str = ""
+    for(i = 0;i<length; i++){
+        for(j = 0;j<length; j++){
+            str = str + level[i][j];
+        }
+    }
 }

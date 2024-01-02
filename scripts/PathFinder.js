@@ -269,7 +269,6 @@ function Component(width, height, color, x, y, type) {
             crash = true;
             console.log("Hit");
         } 
-        console.log("Check colide");
         return crash;
     }
 
@@ -281,7 +280,6 @@ function Component(width, height, color, x, y, type) {
             crash = true;
             console.log("Hit");
         } 
-        console.log("Check colide");
         return crash;
     }
 
@@ -460,7 +458,7 @@ function MakeNextLevel(){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
             let count = TotalLevels();
-            SaveLevel(count+1,level,steps);
+            SaveLevel(count+1,testLevel,steps);
             console.log("Level Test");
             return testLevel;
         }

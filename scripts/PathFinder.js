@@ -27,6 +27,7 @@ function SaveLevel(levelID,Level, steps) {
         level: Level,
         Moves: steps
     })
+    console.log("Saved");
 }
 
 function TotalLevels() {

@@ -6,6 +6,15 @@ let walls = [];
 let moveing = false;
 let moveLocX;
 let moveLocY;
+
+let score = 0;
+let speed = 8;
+
+let N = 15;
+
+
+
+
 let Background = new Image();
 Background.src = "./Resourses/Background2.jpg"
 
@@ -21,16 +30,7 @@ Goal.src = "./Resourses/Goal.jpg"
 let Logoimg = new Image();
 Logoimg.src = "./Resourses/Logo.jpg"
 
-let level = [[1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,1,0,0,0,0,0,0,1,1],
-            [1,0,1,0,2,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,1,1,1,1,1],
-            [1,0,0,0,0,0,0,0,3,1],
-            [1,1,1,1,1,1,1,1,1,1]];
+let level = [];
 
 let images = [Background, Border, Player, Goal, Logoimg];
 
@@ -77,7 +77,13 @@ let myGameArea = {
         logo.height = window.innerHeight*0.15;
         drawLogo();
 
+        this.context.font = "30px Comic Sans MS";
+        this.context.fillStyle = "red";
+        this.context.textAlign = "center";
+        this.context.fillText("Hello World", screenWidth + screenWidth/2, screenHeight * 0.2);
+
         this.frameNo = 0;
+        level = MakeNextLevel();
         setOBS();
         window.addEventListener('keydown', function (e) {
             e.preventDefault();
@@ -94,6 +100,7 @@ let myGameArea = {
     },
     stop : function() {
         clearInterval(this.interval);
+        score++;
         level = MakeNextLevel();
         setOBS();
         startGame();
@@ -104,6 +111,15 @@ function drawLogo(){
     let logo = document.getElementById("Logo");
     let logocontext = logo.getContext("2d");
     logocontext.drawImage(Logoimg,0,0,screenWidth*2,window.innerHeight*0.15);
+}
+
+function updateScore() {
+    myGameArea.context.fillStyle = "#b33c00";
+    myGameArea.context.fillRect(screenWidth,0, screenWidth,screenHeight);
+    myGameArea.context.fillStyle = "#ff9966";
+    myGameArea.context.fillRect(screenWidth + screenWidth*0.05,screenHeight*0.05,screenWidth*0.9,screenHeight*0.9);
+    myGameArea.context.fillStyle = "red"
+    myGameArea.context.fillText("Compleated Levels: " + score, screenWidth + screenWidth/2, screenHeight * 0.2);
 }
 
 function updateScreenSize() {
@@ -121,10 +137,10 @@ function updateScreenSize() {
 
 function setOBS() {
     walls = [];
-    let width = screenWidth/10;
-    let height = screenHeight/10;
-    for(let i = 0; i<10; i+=1){
-        for(let j = 0; j<10; j+=1){
+    let width = screenWidth/N;
+    let height = screenHeight/N;
+    for(let i = 0; i<N; i+=1){
+        for(let j = 0; j<N; j+=1){
             if(level[i][j] == 1){
                 walls.push(new Component(width, height, "red", j*width, i*height));
             }
@@ -235,6 +251,7 @@ function Component(width, height, color, x, y, type) {
 }
 
 function updateGameArea() {
+    updateScore();
     if(moveing != 0){
     for (let i = 0; i < walls.length; i += 1) {
         if(Math.abs(walls[i].xLoc - myGamePiece.xLoc) == 0 && (moveing == 1 || moveing == 3)){
@@ -287,6 +304,7 @@ function updateGameArea() {
 
     myGameArea.clear();
     myGameArea.context.drawImage(Background,0,0,screenWidth,screenHeight);
+    updateScore();
     myGameArea.frameNo += 1;
     for (const element of walls) {
         element.update();
@@ -303,28 +321,28 @@ function everyinterval(n) {
 
 function moveup() {
     if(canMoveUp()){
-    myGamePiece.speedY = -5;
+    myGamePiece.speedY = -1 * speed;
     moveing = 1;
     }
 }
 
 function movedown() {
     if(canMoveDown()){
-    myGamePiece.speedY = 5;
+    myGamePiece.speedY = speed;
     moveing = 3;
     }
 }
 
 function moveleft() {
     if(canMoveLeft()){
-    myGamePiece.speedX = -5;
+    myGamePiece.speedX = -1 * speed;
     moveing = 4;
     }
 }
 
 function moveright() {
     if (canMoveRight()) {
-    myGamePiece.speedX = 5;
+    myGamePiece.speedX = speed;
     moveing = 2;
     }
 }
@@ -366,26 +384,27 @@ function canMoveRight() {
 
 let testLevel;
 function MakeNextLevel(){
-    testLevel = [[1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1]];
+    let testLevel = [];
+    for (let i = 0; i < N; i++) {
+        testLevel[i] = Array(N).fill(0);
+        for (let j = 0; j < N; j++) {
+            if (i === 0 || i === N - 1 || j === 0 || j === N - 1) {
+                testLevel[i][j] = 1;
+            }
+        }
+    }
+    
 
-    ObsNumbers = 15 + Math.floor(Math.random() * 6);
+
+    ObsNumbers = ((N-2)*(N-2))*0.25 + Math.floor(Math.random() * 6);
 
     for(let i = 0;i<ObsNumbers;i++){
-        testLevel[1 + Math.floor(Math.random() * 8)][1 + Math.floor(Math.random() * 8)] = 1;
+        testLevel[1 + Math.floor(Math.random() * (N-2))][1 + Math.floor(Math.random() * (N-2))] = 1;
     }
-    Px = 1 + Math.floor(Math.random() * 8);
-    Py = 1 + Math.floor(Math.random() * 8);
-    Ex = 1 + Math.floor(Math.random() * 8);
-    Ey = 1 + Math.floor(Math.random() * 8);
+    Px = 1 + Math.floor(Math.random() * (N-2));
+    Py = 1 + Math.floor(Math.random() * (N-2));
+    Ex = 1 + Math.floor(Math.random() * (N-2));
+    Ey = 1 + Math.floor(Math.random() * (N-2));
     testLevel[Py][Px] = 0;
     testLevel[Ey][Ex] = 0;
     if(!(Px == Ex && Py == Ey)){
@@ -411,13 +430,15 @@ function CheckLevel(testLevel, Px, Py, Ex, Ey) {
     const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
 
     while (queue.length > 0) {
-        console.log("Queue Length:", queue.length);
         let playerLoc = queue.shift();
-        console.log("Processing:", playerLoc);
 
         if (playerLoc.x == Ex && playerLoc.y == Ey) {
             console.log("Found the exit!");
-            return playerLoc.steps;
+            if(playerLoc.steps > 5 && playerLoc.steps <= 10){
+                console.log("Steps needed:", playerLoc.steps);
+                return playerLoc.steps;
+            }
+            return -1;
         }
 
         // Check if the location has been visited
@@ -447,11 +468,8 @@ function CheckLevel(testLevel, Px, Py, Ex, Ey) {
                 queue.push({ x: tmpx, y: playerLoc.y, steps: playerLoc.steps + 1 });
             }
         }
-
-        console.log("Queue after processing:", queue);
     }
 
-    console.log("Queue is empty. No path found.");
     return -1;
 }
 
@@ -478,6 +496,7 @@ function checkDown(testLevel,x,y){
 }
 
 function checkUp(testLevel,x,y){
+    console.log(testLevel)
     while(testLevel[y-1][x] != 1){
         y--;
     }

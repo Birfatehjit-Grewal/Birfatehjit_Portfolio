@@ -1,11 +1,55 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBEjIFHLuCQIq8DncTuSyEGqpyH6nNJla8",
+  authDomain: "pathfinderdb-e7a0e.firebaseapp.com",
+  databaseURL: "https://pathfinderdb-e7a0e-default-rtdb.firebaseio.com",
+  projectId: "pathfinderdb-e7a0e",
+  storageBucket: "pathfinderdb-e7a0e.appspot.com",
+  messagingSenderId: "776610855488",
+  appId: "1:776610855488:web:556e93b5e347146db83da5",
+  measurementId: "G-DYC44HJZ1C"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+function SaveLevel(levelID,Level, steps) {
+    const db = getDatabase();
+    const referance = ref(db,"levels/"+levelID);
+    set(referance, {
+        level: Level,
+        Moves: steps
+    })
+}
+
+function TotalLevels() {
+    const db = getDatabase();
+    const referance = ref(db,"levels");
+    let Counter = 0;
+    onValue(referance, (snapshot) => {
+        snapshot.forEach(childSnapshot => {
+            Counter++;
+        });
+    })
+    return Data;
+}
+
+totalLevels = 0;
+
+
 let myGamePiece;
 let END;
 let screenHeight;
 let screenWidth;
 let walls = [];
 let moveing = false;
-let moveLocX;
-let moveLocY;
 
 let score = 0;
 let speed = 8;
@@ -61,6 +105,7 @@ Background.onload = function() {
 
 function startGame() {
     updateScreenSize();
+    totalLevels = TotalLevels();
     myGameArea.start();
 }
 
@@ -408,10 +453,13 @@ function MakeNextLevel(){
     testLevel[Py][Px] = 0;
     testLevel[Ey][Ex] = 0;
     if(!(Px == Ex && Py == Ey)){
+        let steps = CheckLevel(testLevel,Px,Py,Ex,Ey);
 
-        if(CheckLevel(testLevel,Px,Py,Ex,Ey) != -1){
+        if( steps != -1){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
+            let count = TotalLevels();
+            SaveLevel(count+1,level,steps);
             console.log("Level Test");
             return testLevel;
         }

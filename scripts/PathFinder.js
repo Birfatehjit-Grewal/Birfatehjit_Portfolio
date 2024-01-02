@@ -43,7 +43,7 @@ function TotalLevels() {
     return Data;
 }
 
-totalLevels = 0;
+let totalLevels = 0;
 
 
 let myGamePiece;

@@ -33,7 +33,7 @@ function SaveLevel(levelID,Level, steps) {
 
 function TotalLevels() {
     const db = getDatabase();
-    const referance = ref(db,"levels");
+    const referance = ref(db,"levels/");
     let Counter = 0;
     onValue(referance, (snapshot) => {
         snapshot.forEach(childSnapshot => {
@@ -42,8 +42,6 @@ function TotalLevels() {
     })
     return Data;
 }
-
-let totalLevels = 0;
 
 
 let myGamePiece;
@@ -107,7 +105,7 @@ Background.onload = function() {
 
 function startGame() {
     updateScreenSize();
-    totalLevels = TotalLevels();
+    let totalLevels = TotalLevels();
     myGameArea.start();
 }
 

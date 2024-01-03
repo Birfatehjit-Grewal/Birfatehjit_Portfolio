@@ -52,9 +52,9 @@ let walls = [];
 let moveing = false;
 
 let score = 0;
-let speed = 8;
+let speed = 5;
 
-let N = 15;
+let N = 14;
 
 
 

@@ -110,14 +110,20 @@ function checkImageLoad() {
     }
 }
 
+function checkDB() {
+    TotalLevels();
+    if (totalLevels == 0) {
+        setTimeout(checkDB, 100);
+    }
+}
+
 Background.onload = function() {
     checkImageLoad();
 };
 
 function startGame() {
     updateScreenSize();
-    TotalLevels();
-    TotalLevels();
+    checkDB();
     console.log("Total in DB: "+ totalLevels);
     myGameArea.start();
 }

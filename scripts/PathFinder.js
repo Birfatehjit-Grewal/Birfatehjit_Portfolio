@@ -444,10 +444,10 @@ function MakeNextLevel(){
     for(let i = 0;i<ObsNumbers;i++){
         testLevel[1 + Math.floor(Math.random() * (N-2))][1 + Math.floor(Math.random() * (N-2))] = 1;
     }
-    Px = 1 + Math.floor(Math.random() * (N-2));
-    Py = 1 + Math.floor(Math.random() * (N-2));
-    Ex = 1 + Math.floor(Math.random() * (N-2));
-    Ey = 1 + Math.floor(Math.random() * (N-2));
+    let Px = 1 + Math.floor(Math.random() * (N-2));
+    let Py = 1 + Math.floor(Math.random() * (N-2));
+    let Ex = 1 + Math.floor(Math.random() * (N-2));
+    let Ey = 1 + Math.floor(Math.random() * (N-2));
     testLevel[Py][Px] = 0;
     testLevel[Ey][Ex] = 0;
     if(!(Px == Ex && Py == Ey)){
@@ -556,4 +556,5 @@ function levelString(level){
             str = str + level[i][j];
         }
     }
+    return str;
 }

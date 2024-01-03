@@ -21,14 +21,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-function SaveLevelPromise(levelID, Level, steps, N) {
+function SaveLevel(levelID,Level, steps,N) {
     const db = getDatabase();
-    const reference = ref(db, "levels/" + levelID);
-    return set(reference, {
+    const referance = ref(db,"levels/"+levelID);
+    set(referance, {
         level: Level,
         Moves: steps,
         Size: N
-    });
+    })
 }
 
 function TotalLevels() {
@@ -55,6 +55,21 @@ function getLevel(ID) {
         N = snapshot.val();
     })
     return levStr;
+}
+
+// Flag to check if the database is loaded
+let isDatabaseLoaded = false;
+
+// Function to initialize Firebase and check if the database is loaded
+function initializeFirebase(callback) {
+    const db = getDatabase();
+    const reference = ref(db, "levels/");
+
+    onValue(reference, (snapshot) => {
+        updatetotallevels(snapshot.size);
+        isDatabaseLoaded = true;
+        callback();
+    });
 }
 
 let myGamePiece;
@@ -103,13 +118,23 @@ function areAllImagesLoaded() {
 function checkImageLoad() {
     if (areAllImagesLoaded()) {
         // All images are loaded, start the game or perform any necessary actions
-        startGame();
+        checkDBAndStartGame();
     } else {
     // Some images are still loading, wait and check again
     setTimeout(checkImageLoad, 100);
     }
 }
 
+function checkDBAndStartGame() {
+    if (isDatabaseLoaded) {
+        startGame();
+    } else {
+        console.log("Waiting for the database to load...");
+        setTimeout(checkDBAndStartGame, 100);
+    }
+}
+
+initializeFirebase(checkDBAndStartGame);
 
 Background.onload = function() {
     checkImageLoad();
@@ -425,7 +450,7 @@ function canMoveRight() {
     return false;
 }
 
-async function MakeNextLevel(){
+function MakeNextLevel(){
     let testLevel = [];
     for (let i = 0; i < N; i++) {
         testLevel[i] = Array(N).fill(0);
@@ -454,8 +479,7 @@ async function MakeNextLevel(){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
             let L2 = levelString(testLevel);
-            await SaveLevelPromise(score + 1, L2, steps, N);
-            await TotalLevels();
+            SaveLevel(score+1,L2,steps,N);
             console.log(totalLevels);
             return testLevel;
         }
@@ -565,16 +589,16 @@ function StringtoLevel(str,N){
     return level;
 }
 
-async function NextLevel() {
-    await TotalLevels();  // Updates totalLevels variable
-
-    if (score < totalLevels) {
-        LoadLevel(score + 1);  // Load the next level
-    } else {
-        level = await MakeNextLevel();  // Generate a new level
+function NextLevel() {
+    TotalLevels();
+    if(score<totalLevels){
+        LoadLevel(score+1);
+    }
+    else{
+        level = MakeNextLevel();
     }
 }
 
-async function LoadLevel(LevelID) {
-    level = StringtoLevel( await getLevel(LevelID), N);
+function LoadLevel(LevelID) {
+    level = StringtoLevel(getLevel(LevelID), N);
 }

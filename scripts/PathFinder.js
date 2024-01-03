@@ -454,7 +454,7 @@ function MakeNextLevel(){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
             let L2 = levelString(testLevel);
-            SaveLevel(totalLevels+1,L2,steps,N);
+            SaveLevel(score+1,L2,steps,N);
             console.log(totalLevels);
             return testLevel;
         }

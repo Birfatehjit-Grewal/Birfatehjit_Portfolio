@@ -582,7 +582,7 @@ function NextLevel() {
         LoadLevel(score+1);
     }
     else{
-        MakeNextLevel();
+        level = MakeNextLevel();
     }
 }
 

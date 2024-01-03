@@ -36,9 +36,7 @@ function TotalLevels() {
     const referance = ref(db,"levels/");
     let Counter = 0;
     onValue(referance, (snapshot) => {
-        snapshot.forEach(childSnapshot => {
-            Counter++;
-        });
+        Counter = snapshot.size;
     })
     return Counter;
 }

@@ -116,6 +116,7 @@ function checkDB() {
         return;
     }
     else{
+        console.log("Timeout DB problems");
         setTimeout(checkDB, 100);
     }
 }

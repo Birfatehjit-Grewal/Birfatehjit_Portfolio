@@ -117,6 +117,7 @@ Background.onload = function() {
 function startGame() {
     updateScreenSize();
     TotalLevels();
+    TotalLevels();
     console.log("Total in DB: "+ totalLevels);
     myGameArea.start();
 }

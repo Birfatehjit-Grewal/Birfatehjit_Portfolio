@@ -112,7 +112,10 @@ function checkImageLoad() {
 
 function checkDB() {
     TotalLevels();
-    if (totalLevels == 0) {
+    if (totalLevels > 0) {
+        return;
+    }
+    else{
         setTimeout(checkDB, 100);
     }
 }

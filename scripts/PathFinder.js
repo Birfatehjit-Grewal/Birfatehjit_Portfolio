@@ -575,6 +575,6 @@ async function NextLevel() {
     }
 }
 
-function LoadLevel(LevelID) {
-    level = StringtoLevel(getLevel(LevelID), N);
+async function LoadLevel(LevelID) {
+    level = StringtoLevel( await getLevel(LevelID), N);
 }

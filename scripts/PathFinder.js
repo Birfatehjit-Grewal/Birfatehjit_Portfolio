@@ -110,16 +110,6 @@ function checkImageLoad() {
     }
 }
 
-function checkDB() {
-    TotalLevels();
-    if (totalLevels > 0) {
-        return;
-    }
-    else{
-        console.log("Timeout DB problems");
-        setTimeout(checkDB, 100);
-    }
-}
 
 Background.onload = function() {
     checkImageLoad();
@@ -127,8 +117,7 @@ Background.onload = function() {
 
 function startGame() {
     updateScreenSize();
-    checkDB();
-    console.log("Total in DB: "+ totalLevels);
+    TotalLevels();
     myGameArea.start();
 }
 
@@ -577,7 +566,7 @@ function StringtoLevel(str,N){
 
 function NextLevel() {
     TotalLevels();
-    if(score<totalLevels){
+    if(score<totalLevels || score == 0){
         LoadLevel(score+1);
     }
     else{

@@ -439,7 +439,7 @@ function MakeNextLevel(){
     
 
 
-    ObsNumbers = ((N-2)*(N-2))*0.25 + Math.floor(Math.random() * 6);
+    let ObsNumbers = ((N-2)*(N-2))*0.25 + Math.floor(Math.random() * 6);
 
     for(let i = 0;i<ObsNumbers;i++){
         testLevel[1 + Math.floor(Math.random() * (N-2))][1 + Math.floor(Math.random() * (N-2))] = 1;

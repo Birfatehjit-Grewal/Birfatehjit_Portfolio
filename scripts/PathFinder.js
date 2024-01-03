@@ -21,14 +21,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-function SaveLevel(levelID,Level, steps) {
+function SaveLevel(levelID,Level, steps,N) {
     const db = getDatabase();
     const referance = ref(db,"levels/"+levelID);
     set(referance, {
         level: Level,
-        Moves: steps
+        Moves: steps,
+        Size: N
     })
-    console.log("Saved");
 }
 
 function TotalLevels() {
@@ -43,6 +43,19 @@ function TotalLevels() {
     return Counter;
 }
 
+function getLevel(ID) {
+    const db = getDatabase();
+    const referance = ref(db,"levels/" + ID + "/level");
+    let levStr;
+    onValue(referance, (snapshot) => {
+        levStr = snapshot.val();
+    })
+    const referance2 = ref(db,"levels/" + ID + "/Size");
+    onValue(referance2, (snapshot) => {
+        N = snapshot.val();
+    })
+    return levStr;
+}
 
 let myGamePiece;
 let END;
@@ -106,6 +119,7 @@ Background.onload = function() {
 function startGame() {
     updateScreenSize();
     let totalLevels = TotalLevels();
+    console.log("Total in DB: "+ totalLevels);
     myGameArea.start();
 }
 
@@ -128,7 +142,7 @@ let myGameArea = {
         this.context.fillText("Hello World", screenWidth + screenWidth/2, screenHeight * 0.2);
 
         this.frameNo = 0;
-        level = MakeNextLevel();
+        NextLevel();
         setOBS();
         window.addEventListener('keydown', function (e) {
             e.preventDefault();
@@ -146,8 +160,6 @@ let myGameArea = {
     stop : function() {
         clearInterval(this.interval);
         score++;
-        level = MakeNextLevel();
-        setOBS();
         startGame();
     }
 }
@@ -266,7 +278,6 @@ function Component(width, height, color, x, y, type) {
         let crash = false;
         if ((myright > otherleft) && (this.oldx < otherleft)) {
             crash = true;
-            console.log("Hit");
         } 
         return crash;
     }
@@ -277,7 +288,6 @@ function Component(width, height, color, x, y, type) {
         let crash = false;
         if ((mybottom > othertop) && (this.oldy < othertop)) {
             crash = true;
-            console.log("Hit");
         } 
         return crash;
     }
@@ -425,7 +435,6 @@ function canMoveRight() {
 }
 
 
-let testLevel;
 function MakeNextLevel(){
     let testLevel = [];
     for (let i = 0; i < N; i++) {
@@ -458,7 +467,7 @@ function MakeNextLevel(){
             testLevel[Ey][Ex] = 3;
             let count = TotalLevels();
             let L2 = levelString(testLevel);
-            SaveLevel(count+1,L2,steps);
+            SaveLevel(count+1,L2,steps,N);
             return testLevel;
         }
     }
@@ -478,9 +487,7 @@ function CheckLevel(testLevel, Px, Py, Ex, Ey) {
         let playerLoc = queue.shift();
 
         if (playerLoc.x == Ex && playerLoc.y == Ey) {
-            console.log("Found the exit!");
             if(playerLoc.steps > 5 && playerLoc.steps <= 10){
-                console.log("Steps needed:", playerLoc.steps);
                 return playerLoc.steps;
             }
             return -1;
@@ -541,7 +548,6 @@ function checkDown(testLevel,x,y){
 }
 
 function checkUp(testLevel,x,y){
-    console.log(testLevel)
     while(testLevel[y-1][x] != 1){
         y--;
     }
@@ -557,4 +563,29 @@ function levelString(level){
         }
     }
     return str;
+}
+
+function StringtoLevel(str,N){
+    let level = [];
+    for (let i = 0; i < N; i++) {
+        level[i] = Array(N).fill(0);
+    }
+    for (let i = 0; i < str.length; i++) {
+        level[Math.floor(i/N)][i%N] = str[i];
+    }
+    return level;
+}
+
+function NextLevel() {
+    let totalLevels = TotalLevels();
+    if(score<totalLevels){
+        LoadLevel(score+1);
+    }
+    else{
+        MakeNextLevel();
+    }
+}
+
+function LoadLevel(LevelID) {
+    level = StringtoLevel(getLevel(LevelID), N);
 }

@@ -69,9 +69,6 @@ let speed = 5;
 
 let N = 14;
 
-
-
-
 let Background = new Image();
 Background.src = "./Resourses/Background2.jpg"
 
@@ -352,9 +349,6 @@ function updateGameArea() {
     if (myGameArea.keys && myGameArea.keys[38] && moveing == 0) {moveup(); }
     if (myGameArea.keys && myGameArea.keys[40] && moveing == 0) {movedown(); }
 
-
-
-
     myGameArea.clear();
     myGameArea.context.drawImage(Background,0,0,screenWidth,screenHeight);
     updateScore();
@@ -366,10 +360,6 @@ function updateGameArea() {
 
     myGamePiece.newPos();    
     myGamePiece.update();
-}
-
-function everyinterval(n) {
-    return (myGameArea.frameNo / n) % 1 == 0;
 }
 
 function moveup() {
@@ -434,7 +424,6 @@ function canMoveRight() {
     return false;
 }
 
-
 function MakeNextLevel(){
     let testLevel = [];
     for (let i = 0; i < N; i++) {
@@ -445,8 +434,6 @@ function MakeNextLevel(){
             }
         }
     }
-    
-
 
     let ObsNumbers = ((N-2)*(N-2))*0.25 + Math.floor(Math.random() * 6);
 

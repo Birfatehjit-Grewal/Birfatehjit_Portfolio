@@ -21,14 +21,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-function SaveLevel(levelID,Level, steps,N) {
+function SaveLevelPromise(levelID, Level, steps, N) {
     const db = getDatabase();
-    const referance = ref(db,"levels/"+levelID);
-    set(referance, {
+    const reference = ref(db, "levels/" + levelID);
+    return set(reference, {
         level: Level,
         Moves: steps,
         Size: N
-    })
+    });
 }
 
 function TotalLevels() {
@@ -425,7 +425,7 @@ function canMoveRight() {
     return false;
 }
 
-function MakeNextLevel(){
+async function MakeNextLevel(){
     let testLevel = [];
     for (let i = 0; i < N; i++) {
         testLevel[i] = Array(N).fill(0);
@@ -454,7 +454,8 @@ function MakeNextLevel(){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
             let L2 = levelString(testLevel);
-            SaveLevel(score+1,L2,steps,N);
+            await SaveLevelPromise(score + 1, L2, steps, N);
+            await TotalLevels();
             console.log(totalLevels);
             return testLevel;
         }
@@ -564,13 +565,13 @@ function StringtoLevel(str,N){
     return level;
 }
 
-function NextLevel() {
-    TotalLevels();
-    if(score<totalLevels || score == 0){
-        LoadLevel(score+1);
-    }
-    else{
-        level = MakeNextLevel();
+async function NextLevel() {
+    await TotalLevels();  // Updates totalLevels variable
+
+    if (score < totalLevels) {
+        LoadLevel(score + 1);  // Load the next level
+    } else {
+        level = await MakeNextLevel();  // Generate a new level
     }
 }
 

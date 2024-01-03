@@ -34,11 +34,13 @@ function SaveLevel(levelID,Level, steps,N) {
 function TotalLevels() {
     const db = getDatabase();
     const referance = ref(db,"levels/");
-    let Counter = 0;
     onValue(referance, (snapshot) => {
-        Counter = snapshot.size;
+        updatetotallevels(snapshot.size);
     })
-    return Counter;
+}
+
+function updatetotallevels(sizeDB){
+    totalLevels = sizeDB;
 }
 
 function getLevel(ID) {
@@ -66,6 +68,7 @@ let score = 0;
 let speed = 5;
 
 let N = 14;
+let totalLevels = 0;
 
 let Background = new Image();
 Background.src = "./Resourses/Background2.jpg"
@@ -113,7 +116,7 @@ Background.onload = function() {
 
 function startGame() {
     updateScreenSize();
-    let totalLevels = TotalLevels();
+    TotalLevels();
     console.log("Total in DB: "+ totalLevels);
     myGameArea.start();
 }
@@ -562,7 +565,7 @@ function StringtoLevel(str,N){
 }
 
 function NextLevel() {
-    let totalLevels = TotalLevels();
+    TotalLevels();
     if(score<totalLevels){
         LoadLevel(score+1);
     }

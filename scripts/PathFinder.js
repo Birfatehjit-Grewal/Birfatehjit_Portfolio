@@ -551,8 +551,8 @@ function checkUp(testLevel,x,y){
 function levelString(level){
     let length = level.length;
     let str = ""
-    for(i = 0;i<length; i++){
-        for(j = 0;j<length; j++){
+    for(let i = 0;i<length; i++){
+        for(let j = 0;j<length; j++){
             str = str + level[i][j];
         }
     }

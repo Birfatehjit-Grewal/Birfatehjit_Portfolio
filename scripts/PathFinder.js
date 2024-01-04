@@ -187,8 +187,11 @@ let myGameArea = {
 
 // draws the logo for the game
 function drawLogo(){
+
     let logo = document.getElementById("Logo");
     let logocontext = logo.getContext("2d");
+    logocontext.fillStyle = "#b33c00";
+    logocontext.fillRect(screenWidth,0, screenWidth,screenHeight);
     logocontext.drawImage(Logoimg,0,0,screenWidth*2,window.innerHeight*0.15);
 }
 

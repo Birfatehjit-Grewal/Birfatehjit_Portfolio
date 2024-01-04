@@ -1,16 +1,16 @@
-/*header style*/
+
 header {
     padding: 0px;
  }
- /*navigation menu style*/
+
  nav {
     display: block;
     text-align: center;
     word-spacing: 30px;
     Padding: 5px;
-    background-color: aqua;
+    background-color: #f58319;
  }
- /*creating the two-column layout*/
+ 
  *{
     box-sizing: border-box;
  }
@@ -25,7 +25,7 @@ header {
     margin-right: auto;
  }
   
-  /* Style the footer */
+  
   footer {
     display: block;
     background-color: chocolate;
@@ -47,6 +47,6 @@ header {
 }
 
 body {
-    background-image: url('Resourses/Background.jpg');
+    background-color: #f58319;
     background-size: cover;
 }

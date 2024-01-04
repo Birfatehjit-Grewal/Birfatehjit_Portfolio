@@ -97,7 +97,7 @@ let Goal = new Image();
 Goal.src = "./Resourses/Goal.jpg"
 
 let Logoimg = new Image();
-Logoimg.src = "./Resourses/Logo.jpg"
+Logoimg.src = "./Resourses/Logo.png"
 
 // variable to store the level
 let level = [];

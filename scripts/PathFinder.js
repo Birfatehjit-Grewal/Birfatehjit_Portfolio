@@ -1,12 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getDatabase, ref, set, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase Configration
 const firebaseConfig = {
   apiKey: "AIzaSyBEjIFHLuCQIq8DncTuSyEGqpyH6nNJla8",
   authDomain: "pathfinderdb-e7a0e.firebaseapp.com",
@@ -21,6 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Function to save new levels
 function SaveLevel(levelID,Level, steps,N) {
     const db = getDatabase();
     const referance = ref(db,"levels/"+levelID);
@@ -31,6 +27,7 @@ function SaveLevel(levelID,Level, steps,N) {
     })
 }
 
+// checks the size of the database
 function TotalLevels() {
     const db = getDatabase();
     const referance = ref(db,"levels/");
@@ -39,10 +36,12 @@ function TotalLevels() {
     })
 }
 
+// updates the totalLevels variable
 function updatetotallevels(sizeDB){
     totalLevels = sizeDB;
 }
 
+// extracts the information about the level from the database
 function getLevel(ID) {
     const db = getDatabase();
     const referance = ref(db,"levels/" + ID + "/level");
@@ -72,19 +71,19 @@ function initializeFirebase(callback) {
     });
 }
 
+// variables to control the game/canvas
 let myGamePiece;
 let END;
 let screenHeight;
 let screenWidth;
 let walls = [];
 let moveing = false;
-
 let score = 0;
 let speed = 5;
-
 let N = 14;
 let totalLevels = 0;
 
+// images for the game
 let Background = new Image();
 Background.src = "./Resourses/Background2.jpg"
 
@@ -100,6 +99,7 @@ Goal.src = "./Resourses/Goal.jpg"
 let Logoimg = new Image();
 Logoimg.src = "./Resourses/Logo.jpg"
 
+// variable to store the level
 let level = [];
 
 let images = [Background, Border, Player, Goal, Logoimg];
@@ -117,7 +117,6 @@ function areAllImagesLoaded() {
 // Event listener for image loading
 function checkImageLoad() {
     if (areAllImagesLoaded()) {
-        // All images are loaded, start the game or perform any necessary actions
         checkDBAndStartGame();
     } else {
     // Some images are still loading, wait and check again
@@ -125,11 +124,11 @@ function checkImageLoad() {
     }
 }
 
+// Event listener for Database loading
 function checkDBAndStartGame() {
     if (isDatabaseLoaded) {
         startGame();
     } else {
-        console.log("Waiting for the database to load...");
         setTimeout(checkDBAndStartGame, 100);
     }
 }
@@ -140,12 +139,14 @@ Background.onload = function() {
     checkImageLoad();
 };
 
+// Function to Start the game
 function startGame() {
     updateScreenSize();
     TotalLevels();
     myGameArea.start();
 }
 
+// variable for the gamearea
 let myGameArea = {
     canvas : document.getElementById("gameCanvas"),
     start : function() {
@@ -153,17 +154,14 @@ let myGameArea = {
         this.canvas.height = screenHeight;
         this.context = this.canvas.getContext("2d");
         this.context.drawImage(Background,0,0,screenWidth,screenHeight);
-
         let logo = document.getElementById("Logo");
         logo.width = screenWidth*2;
         logo.height = window.innerHeight*0.15;
         drawLogo();
-
         this.context.font = "30px Comic Sans MS";
         this.context.fillStyle = "red";
         this.context.textAlign = "center";
         this.context.fillText("Hello World", screenWidth + screenWidth/2, screenHeight * 0.2);
-
         this.frameNo = 0;
         NextLevel();
         setOBS();
@@ -187,12 +185,14 @@ let myGameArea = {
     }
 }
 
+// draws the logo for the game
 function drawLogo(){
     let logo = document.getElementById("Logo");
     let logocontext = logo.getContext("2d");
     logocontext.drawImage(Logoimg,0,0,screenWidth*2,window.innerHeight*0.15);
 }
 
+// updates the total compleated levels
 function updateScore() {
     myGameArea.context.fillStyle = "#b33c00";
     myGameArea.context.fillRect(screenWidth,0, screenWidth,screenHeight);
@@ -202,6 +202,7 @@ function updateScore() {
     myGameArea.context.fillText("Compleated Levels: " + score, screenWidth + screenWidth/2, screenHeight * 0.2);
 }
 
+// updates the calculated game canvas size
 function updateScreenSize() {
     screenHeight = window.innerHeight * 0.80;
     screenWidth = window.innerWidth * 0.80;
@@ -215,6 +216,7 @@ function updateScreenSize() {
     }
 }
 
+// creates the components for the game
 function setOBS() {
     walls = [];
     let width = screenWidth/N;
@@ -238,6 +240,7 @@ function setOBS() {
 
 }
 
+// component constructor for walls player and finish
 function Component(width, height, color, x, y, type) {
     this.type = type;
     this.width = width;
@@ -326,6 +329,8 @@ function Component(width, height, color, x, y, type) {
     }
 }
 
+// updates the screen and redraws the canvas also checks if the level is complete
+// controls the movement of the player
 function updateGameArea() {
     updateScore();
     if(moveing != 0){
@@ -388,6 +393,7 @@ function updateGameArea() {
     myGamePiece.update();
 }
 
+// Functions for the movement of the player
 function moveup() {
     if(canMoveUp()){
     myGamePiece.speedY = -1 * speed;
@@ -416,12 +422,14 @@ function moveright() {
     }
 }
 
+// Clears the movement of the player
 function clearmove() {
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
     moveing = 0;
 }
 
+// Checks if there is space for the player to move
 function canMoveUp() {
     if (moveing == 0) {
         return level[myGamePiece.yLoc - 1][myGamePiece.xLoc] == 0;
@@ -450,6 +458,7 @@ function canMoveRight() {
     return false;
 }
 
+// makes a new level and calls the savelevel function
 function MakeNextLevel(){
     let testLevel = [];
     for (let i = 0; i < N; i++) {
@@ -488,6 +497,7 @@ function MakeNextLevel(){
     return MakeNextLevel();
 }
 
+// Function to ensure the created level is compleatable
 function CheckLevel(testLevel, Px, Py, Ex, Ey) {
     const queue = [{ x: Px, y: Py, steps: 0 }];
     const rows = testLevel.length;
@@ -495,7 +505,6 @@ function CheckLevel(testLevel, Px, Py, Ex, Ey) {
 
     // Create a 2D array to track visited locations
     const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
-
     while (queue.length > 0) {
         let playerLoc = queue.shift();
 
@@ -505,9 +514,6 @@ function CheckLevel(testLevel, Px, Py, Ex, Ey) {
             }
             return -1;
         }
-
-        // Check if the location has been visited
-
         visited[playerLoc.y][playerLoc.x] = true;
         if(testLevel[playerLoc.y+1][playerLoc.x] != 1){
             let tmpy =  checkUp(testLevel,playerLoc.x,playerLoc.y);
@@ -567,6 +573,7 @@ function checkUp(testLevel,x,y){
     return y;
 }
 
+// converts genterated level to a string to be saved
 function levelString(level){
     let length = level.length;
     let str = ""
@@ -578,6 +585,7 @@ function levelString(level){
     return str;
 }
 
+// turns the level back from string to a level
 function StringtoLevel(str,N){
     let level = [];
     for (let i = 0; i < N; i++) {
@@ -589,6 +597,7 @@ function StringtoLevel(str,N){
     return level;
 }
 
+// controler to see if a new level needs to be generated or loaded from the database 
 function NextLevel() {
     TotalLevels();
     if(score<totalLevels){
@@ -599,6 +608,7 @@ function NextLevel() {
     }
 }
 
+// loads the level
 function LoadLevel(LevelID) {
     level = StringtoLevel(getLevel(LevelID), N);
 }

@@ -120,19 +120,23 @@ function areAllImagesLoaded() {
             
 // Event listener for image loading
 function checkImageLoad() {
+    console.log("Check for images");
     if (areAllImagesLoaded()) {
         checkDBAndStartGame();
     } else {
     // Some images are still loading, wait and check again
+    console.log("Images are loading still");
     setTimeout(checkImageLoad, 100);
     }
 }
 
 // Event listener for Database loading
 function checkDBAndStartGame() {
+    console.log("CheckDB");
     if (isDatabaseLoaded) {
         startGame();
     } else {
+        console.log("Timeout for 100");
         setTimeout(checkDBAndStartGame, 100);
     }
 }
@@ -140,6 +144,7 @@ function checkDBAndStartGame() {
 initializeFirebase(checkDBAndStartGame);
 
 Background.onload = function() {
+    console.log("Background onload");
     checkImageLoad();
 };
 

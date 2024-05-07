@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+//import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/*
 const firebaseConfig = {
   apiKey: "AIzaSyBEjIFHLuCQIq8DncTuSyEGqpyH6nNJla8",
   authDomain: "pathfinderdb-e7a0e.firebaseapp.com",
@@ -74,7 +75,7 @@ function initializeFirebase(callback) {
         callback();
     });
 }
-
+*/
 // variables to control the game/canvas
 let myGamePiece;
 let END;
@@ -133,7 +134,7 @@ function checkImageLoad() {
 // Event listener for Database loading
 function checkDBAndStartGame() {
     console.log("CheckDB");
-    if (isDatabaseLoaded) {
+    if (isDatabaseLoaded == false) {
         startGame();
     } else {
         console.log("Timeout for 100");
@@ -141,7 +142,7 @@ function checkDBAndStartGame() {
     }
 }
 
-initializeFirebase(checkDBAndStartGame);
+//initializeFirebase(checkDBAndStartGame);
 
 Background.onload = function() {
     console.log("Background onload");

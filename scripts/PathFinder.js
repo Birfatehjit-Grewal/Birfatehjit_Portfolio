@@ -1,81 +1,4 @@
-// Import the functions you need from the SDKs you need
-//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-//import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-/*
-const firebaseConfig = {
-  apiKey: "AIzaSyBEjIFHLuCQIq8DncTuSyEGqpyH6nNJla8",
-  authDomain: "pathfinderdb-e7a0e.firebaseapp.com",
-  databaseURL: "https://pathfinderdb-e7a0e-default-rtdb.firebaseio.com",
-  projectId: "pathfinderdb-e7a0e",
-  storageBucket: "pathfinderdb-e7a0e.appspot.com",
-  messagingSenderId: "776610855488",
-  appId: "1:776610855488:web:556e93b5e347146db83da5",
-  measurementId: "G-DYC44HJZ1C"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Function to save new levels
-function SaveLevel(levelID,Level, steps,N) {
-    const db = getDatabase();
-    const referance = ref(db,"levels/"+levelID);
-    set(referance, {
-        level: Level,
-        Moves: steps,
-        Size: N
-    })
-}
-
-// checks the size of the database
-function TotalLevels() {
-    const db = getDatabase();
-    const referance = ref(db,"levels/");
-    onValue(referance, (snapshot) => {
-        updatetotallevels(snapshot.size);
-    })
-}
-
-// updates the totalLevels variable
-function updatetotallevels(sizeDB){
-    totalLevels = sizeDB;
-}
-
-// extracts the information about the level from the database
-function getLevel(ID) {
-    const db = getDatabase();
-    const referance = ref(db,"levels/" + ID + "/level");
-    let levStr;
-    onValue(referance, (snapshot) => {
-        levStr = snapshot.val();
-    })
-    const referance2 = ref(db,"levels/" + ID + "/Size");
-    onValue(referance2, (snapshot) => {
-        N = snapshot.val();
-    })
-    return levStr;
-}
-
-// Flag to check if the database is loaded
-let isDatabaseLoaded = false;
-
-// Function to initialize Firebase and check if the database is loaded
-function initializeFirebase(callback) {
-    const db = getDatabase();
-    const reference = ref(db, "levels/");
-
-    onValue(reference, (snapshot) => {
-        updatetotallevels(snapshot.size);
-        isDatabaseLoaded = true;
-        callback();
-    });
-}
-*/
 // variables to control the game/canvas
 let myGamePiece;
 let END;
@@ -123,7 +46,7 @@ function areAllImagesLoaded() {
 function checkImageLoad() {
     console.log("Check for images");
     if (areAllImagesLoaded()) {
-        checkDBAndStartGame();
+        startGame();
     } else {
     // Some images are still loading, wait and check again
     console.log("Images are loading still");
@@ -131,16 +54,7 @@ function checkImageLoad() {
     }
 }
 
-// Event listener for Database loading
-function checkDBAndStartGame() {
-    console.log("CheckDB");
-    if (isDatabaseLoaded == false) {
-        startGame();
-    } else {
-        console.log("Timeout for 100");
-        setTimeout(checkDBAndStartGame, 100);
-    }
-}
+
 
 //initializeFirebase(checkDBAndStartGame);
 
@@ -152,7 +66,6 @@ Background.onload = function() {
 // Function to Start the game
 function startGame() {
     updateScreenSize();
-    TotalLevels();
     myGameArea.start();
 }
 
@@ -500,9 +413,6 @@ function MakeNextLevel(){
         if( steps != -1){
             testLevel[Py][Px] = 2;
             testLevel[Ey][Ex] = 3;
-            let L2 = levelString(testLevel);
-            SaveLevel(score+1,L2,steps,N);
-            console.log(totalLevels);
             return testLevel;
         }
     }
@@ -612,13 +522,7 @@ function StringtoLevel(str,N){
 
 // controler to see if a new level needs to be generated or loaded from the database 
 function NextLevel() {
-    TotalLevels();
-    if(score<totalLevels){
-        LoadLevel(score+1);
-    }
-    else{
         level = MakeNextLevel();
-    }
 }
 
 // loads the level

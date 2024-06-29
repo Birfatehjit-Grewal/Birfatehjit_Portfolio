@@ -1,1 +1,2 @@
-FireBAse is not working
+<H1>PathFinder Web Game </H1> 
+<p>The game uses HTML canvas components to display the current status of the game. The project initially used Firebase as a real-time database to store levels. Still, due to some updates, the app was no longer able to establish a connection to the database for a Git repository so currently game levels are stored in the JavaScript file that controls the logic behind the game. The JavaScript file updates the canvas periodically showing the current position of the player and the level. Moreover, the JavaScript file handles the collisions between the player and objects in the level.</p>
